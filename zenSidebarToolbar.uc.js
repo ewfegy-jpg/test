@@ -1,4 +1,3 @@
-// zenSidebarToolbar.uc.js
 console.log("ZEN SCRIPT LOADED");
 
 (function () {
@@ -19,14 +18,12 @@ console.log("ZEN SCRIPT LOADED");
       toolbar.setAttribute("iconsize", "small");
       toolbar.setAttribute("context", "toolbar-context-menu");
 
-      // 🔥 KEY PART — place it correctly
-      const sidebar = document.getElementById("sidebar-box");
+      // ✅ find a REAL child of toolbox
+      const ref = document.getElementById("zen-sidebar-top-buttons");
 
-      if (sidebar) {
-        // insert BEFORE sidebar so it's part of sidebar layout
-        toolbox.insertBefore(toolbar, sidebar);
+      if (ref && ref.parentNode === toolbox) {
+        toolbox.insertBefore(toolbar, ref.nextSibling);
       } else {
-        // fallback
         toolbox.appendChild(toolbar);
       }
 
