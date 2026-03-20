@@ -1,18 +1,15 @@
 /* Make the custom sidebar toolbar background transparent */
 #zen-sidebar-custom-toolbar {
   background: transparent !important;
+  display: flex !important;
   flex-direction: row !important;   /* horizontal alignment */
+  flex-wrap: wrap;
   box-shadow: none !important; /* remove any shadow if present */
   border: none !important;
-}
-
-/* Make buttons inline */
-#zen-sidebar-custom-toolbar .customization-target {
-  display: flex !important;
-  flex-wrap: wrap;                  /* wrap if too many buttons */
   align-items: center;              /* vertically center */
   justify-content: flex-start;      /* left-align them */
 }
+
 
 /* Make buttons shrink to content, not full width */
 #zen-sidebar-custom-toolbar toolbarbutton {
