@@ -7,5 +7,9 @@
         "chrome://browser/content/browser.xhtml"
       ]
     }
+  },
+
+  "style": {
+    "chrome": "userChrome.css"
   }
 }
