@@ -12,22 +12,31 @@ console.log("ZEN SCRIPT LOADED");
     try {
       const toolbar = document.createXULElement("toolbar");
       toolbar.id = AREA_ID;
+
+      // ✅ important attributes
       toolbar.setAttribute("customizable", "true");
       toolbar.setAttribute("class", "browser-toolbar customization-target");
       toolbar.setAttribute("mode", "icons");
       toolbar.setAttribute("iconsize", "small");
       toolbar.setAttribute("context", "toolbar-context-menu");
+      toolbar.setAttribute("fullscreentoolbar", "true");
+      toolbar.setAttribute("skipintoolbarset", "true");
 
-      // ✅ find a REAL child of toolbox
-      const ref = document.getElementById("zen-sidebar-top-buttons");
+      // insert near native Zen toolbar
+      const ref = document.getElementById("zen-sidebar-foot-buttons");
+      const parent = ref?.parentNode || toolbox;
 
-      if (ref && ref.parentNode === toolbox) {
-        toolbox.insertBefore(toolbar, ref.nextSibling);
-      } else {
-        toolbox.appendChild(toolbar);
+      parent.insertBefore(toolbar, ref);
+
+      // 🔥 THIS is what enables drag & drop
+      if (typeof CustomizableUI !== "undefined") {
+        CustomizableUI.registerArea(AREA_ID, {
+          type: CustomizableUI.TYPE_TOOLBAR,
+          defaultPlacements: []
+        });
       }
 
-      console.log("Toolbar appended to navigator-toolbox");
+      console.log("Customizable toolbar registered");
       return true;
 
     } catch (e) {
