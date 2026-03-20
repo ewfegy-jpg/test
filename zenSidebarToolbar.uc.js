@@ -7,7 +7,7 @@ console.log("ZEN SCRIPT LOADED");
   function initToolbar() {
     if (!window.CustomizableUI) return false;
 
-    // 🔥 register area EARLY (important for persistence)
+    // 🔥 register area early for persistence
     if (!CustomizableUI.getAreaType(NEW_ID)) {
       CustomizableUI.registerArea(NEW_ID, {
         type: CustomizableUI.TYPE_TOOLBAR,
@@ -21,30 +21,34 @@ console.log("ZEN SCRIPT LOADED");
     if (document.getElementById(NEW_ID)) return true;
 
     try {
+      // clone native toolbar
       const clone = original.cloneNode(true);
-
       clone.id = NEW_ID;
       clone.setAttribute("toolbarname", "Custom Sidebar Toolbar");
 
-      // remove inherited state ONLY on creation
+      // remove inherited state
       clone.removeAttribute("currentset");
       clone.removeAttribute("defaultset");
 
+      // 🔥 remove workspace button
+      const workspaceButton = clone.querySelector("#zen-workspaces-button");
+      if (workspaceButton) workspaceButton.remove();
+
+      // insert into place
       original.parentNode.insertBefore(clone, original);
 
+      // register toolbar
       CustomizableUI.registerToolbarNode(clone);
 
-      // 🔥 ONLY reset if toolbar has never been customized
+      // reset area only if empty
       const hasSavedState =
         CustomizableUI.getWidgetIdsInArea(NEW_ID).length > 0;
-
       if (!hasSavedState) {
         CustomizableUI.resetArea(NEW_ID);
       }
 
-      console.log("Persistent toolbar ready");
+      console.log("Persistent toolbar ready (workspace button removed)");
       return true;
-
     } catch (e) {
       console.error("Init failed:", e);
       return false;
@@ -52,9 +56,7 @@ console.log("ZEN SCRIPT LOADED");
   }
 
   function waitForUI() {
-    if (!initToolbar()) {
-      setTimeout(waitForUI, 50);
-    }
+    if (!initToolbar()) setTimeout(waitForUI, 50);
   }
 
   waitForUI();
