@@ -1,0 +1,11 @@
+{
+  "id": "zen-sidebar-toolbar",
+  "name": "Zen Sidebar Toolbar",
+  "scripts": {
+    "zenSidebarToolbar.uc.js": {
+      "include": [
+        "chrome://browser/content/browser.xhtml"
+      ]
+    }
+  }
+}
