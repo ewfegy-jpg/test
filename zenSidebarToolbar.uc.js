@@ -4,50 +4,57 @@ console.log("ZEN SCRIPT LOADED");
   const SOURCE_ID = "zen-sidebar-foot-buttons";
   const NEW_ID = "zen-sidebar-custom-toolbar";
 
-  function tryCloneToolbar() {
+  function initToolbar() {
+    if (!window.CustomizableUI) return false;
+
+    // 🔥 register area EARLY (important for persistence)
+    if (!CustomizableUI.getAreaType(NEW_ID)) {
+      CustomizableUI.registerArea(NEW_ID, {
+        type: CustomizableUI.TYPE_TOOLBAR,
+        defaultPlacements: []
+      });
+    }
+
     const original = document.getElementById(SOURCE_ID);
     if (!original) return false;
 
     if (document.getElementById(NEW_ID)) return true;
 
     try {
-      // 🔥 deep clone
       const clone = original.cloneNode(true);
 
-      // change id
       clone.id = NEW_ID;
+      clone.setAttribute("toolbarname", "Custom Sidebar Toolbar");
 
-      // clean state
+      // remove inherited state ONLY on creation
       clone.removeAttribute("currentset");
       clone.removeAttribute("defaultset");
 
-      // optional: give it a name
-      clone.setAttribute("toolbarname", "Custom Sidebar Toolbar");
-
-      // insert right above original
       original.parentNode.insertBefore(clone, original);
 
-      // 🔥 register as NEW area
-      if (window.CustomizableUI) {
-        CustomizableUI.registerArea(NEW_ID, {
-          type: CustomizableUI.TYPE_TOOLBAR,
-          defaultPlacements: []
-        });
+      CustomizableUI.registerToolbarNode(clone);
 
-        CustomizableUI.registerToolbarNode(clone);
+      // 🔥 ONLY reset if toolbar has never been customized
+      const hasSavedState =
+        CustomizableUI.getWidgetIdsInArea(NEW_ID).length > 0;
+
+      if (!hasSavedState) {
+        CustomizableUI.resetArea(NEW_ID);
       }
 
-      console.log("Cloned toolbar created");
+      console.log("Persistent toolbar ready");
       return true;
 
     } catch (e) {
-      console.error("Clone failed:", e);
+      console.error("Init failed:", e);
       return false;
     }
   }
 
   function waitForUI() {
-    if (!tryCloneToolbar()) setTimeout(waitForUI, 100);
+    if (!initToolbar()) {
+      setTimeout(waitForUI, 50);
+    }
   }
 
   waitForUI();
