@@ -1,256 +1,65 @@
-/* Make the custom sidebar toolbar background transparent */
-#zen-sidebar-custom-toolbar {
-  background: transparent !important;
-  display: flex !important;
-  flex-direction: row !important;   /* horizontal alignment */
-  flex-wrap: wrap;
-  box-shadow: none !important; /* remove any shadow if present */
+#back-button, #forward-button {
+  order: -1 !important;
+}
+
+/* container spacing */
+.titlebar-buttonbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+}
+
+/* base circle */
+.titlebar-button {
+  appearance: none !important;
+  content: none !important;;
+
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+
+  border-radius: 50% !important;
   border: none !important;
-  align-items: center;              /* vertically center */
-  justify-content: flex-start;      /* left-align them */
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  opacity: 0.5; /* 👈 more transparent */
+  transition: 
+    opacity 0.2s ease,
+    transform 0.15s ease,
+    filter 0.2s ease;
 }
 
-
-/* Make buttons shrink to content, not full width */
-#zen-sidebar-custom-toolbar toolbarbutton {
-  flex: 0 0 auto !important;
-  width: auto !important;
+/* hide default content */
+.titlebar-button .toolbarbutton-icon,
+.titlebar-button .toolbarbutton-text {
+  display: none !important;
 }
 
-#zen-sidebar-custom-toolbar toolbarbutton {
-  margin: 2px 4px !important; /* vertical | horizontal */
-}
-/* -------------------- FLEX CONTAINER -------------------- */
-#sidebar-flex-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
+/* colors */
+.titlebar-close {
+  background-color: #ff5f57 !important;
 }
 
-
-
-/* -------------------- CUSTOM SIDEBAR PANEL -------------------- */
-#zen-sidebar-extra-panel {
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-
-  height: 100%;
-  flex-shrink: 0;
-
-  display: flex;
-  flex-direction: column;
-  background: transparent !important;
-  padding: 10px 0 2px 0!important;
+.titlebar-min {
+  background-color: #f5c542 !important;
 }
 
-
-/* -------------------- MAIN SIDEBAR BROWSER -------------------- */
-
-
-@-moz-document url("chrome://browser/content/browser.xhtml")
-{ 
-  #sidebar {
-	flex: 1;
-    min-width: 0;
-    border-radius: var(--border-radius-medium) !important;
-    overflow: hidden !important;
-	background-color: var(--sidebar-background-color) !important;
-  }
-
-  #sidebar-box {
-    gap: 8px !important;
-    transform: translateX(0);
-    overflow: hidden;
-    background: transparent !important;
-    margin-left: 0px !important;
-    margin-right: 2px !important;
-    box-shadow: none !important;
-	border-right: 2px solid var(--button-background-color-hover)!important;
-	border-radius: 0 !important;
-  }
-
-  #sidebar-header {
-    background: transparent !important;
-    border-radius: var(--border-radius-medium);
-    transition: background 0.1s;
-    padding: 3px 1px 3px 10px !important;
-	margin: 0 5px 0 0 !important;
-    border: none !important;
-  }
-
-  #sidebar-switcher-target {
-    background: transparent !important;
-    border: none !important;
-    padding: 0px !important;
-    margin: 0px !important;
-  }
-
-  #sidebar-header:hover {
-    background: var(--tab-hover-background-color) !important;
-  }
-
-  #sidebar-title {
-    opacity: 0.7;
-    font-weight: 600;
-    font-size: small;
-  }
-
-  #sidebar-icon {
-    display: none !important;
-  }
-
-  #sidebar-title {
-    padding: 0px !important;
-  }
-
-  #sidebar-close,
-  #sidebar-spacer,
-  #sidebar-throbber {
-    display: none !important;
-  }
-
-  #sidebar-switcher-arrow {
-    padding: var(--toolbarbutton-inner-padding) !important;
-    width: calc(2 * var(--toolbarbutton-inner-padding) + 16px) !important;
-    height: calc(2 * var(--toolbarbutton-inner-padding) + 16px) !important;
-  }
-}
-  
-@-moz-document url("chrome://browser/content/places/historySidebar.xhtml") {
-   #viewButton {
-     background-color: transparent !important;
-	 border: none !important;
-	 border-radius: var(--border-radius-medium);
- 
- 
-   }
-}
-/* Make the custom sidebar toolbar background transparent */
-#zen-sidebar-custom-toolbar {
-  background: transparent !important;
-  display: flex !important;
-  flex-direction: row !important;   /* horizontal alignment */
-  flex-wrap: wrap;
-  box-shadow: none !important; /* remove any shadow if present */
-  border: none !important;
-  align-items: center;              /* vertically center */
-  justify-content: flex-start;      /* left-align them */
+.titlebar-max,
+.titlebar-restore {
+  background-color: #30d158 !important;
 }
 
-
-/* Make buttons shrink to content, not full width */
-#zen-sidebar-custom-toolbar toolbarbutton {
-  flex: 0 0 auto !important;
-  width: auto !important;
+/* hover = more visible */
+.titlebar-button:hover {
+  opacity: 0.9;
+  filter: brightness(1.1);
 }
 
-#zen-sidebar-custom-toolbar toolbarbutton {
-  margin: 2px 4px !important; /* vertical | horizontal */
-}
-/* -------------------- FLEX CONTAINER -------------------- */
-#sidebar-flex-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-
-
-/* -------------------- CUSTOM SIDEBAR PANEL -------------------- */
-#zen-sidebar-extra-panel {
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-
-  height: 100%;
-  flex-shrink: 0;
-
-  display: flex;
-  flex-direction: column;
-  background: transparent !important;
-  padding: 10px 0 2px 0!important;
-}
-
-
-/* -------------------- MAIN SIDEBAR BROWSER -------------------- */
-
-
-@-moz-document url("chrome://browser/content/browser.xhtml")
-{ 
-  #sidebar {
-	flex: 1;
-    min-width: 0;
-    border-radius: var(--border-radius-medium) !important;
-    overflow: hidden !important;
-	background-color: var(--sidebar-background-color) !important;
-  }
-
-  #sidebar-box {
-    gap: 8px !important;
-    transform: translateX(0);
-    overflow: hidden;
-    background: transparent !important;
-    margin-left: 0px !important;
-    margin-right: 2px !important;
-    box-shadow: none !important;
-	border-right: 2px solid var(--button-background-color-hover)!important;
-	border-radius: 0 !important;
-  }
-
-  #sidebar-header {
-    background: transparent !important;
-    border-radius: var(--border-radius-medium);
-    transition: background 0.1s;
-    padding: 3px 1px 3px 10px !important;
-	margin: 0 5px 0 0 !important;
-    border: none !important;
-  }
-
-  #sidebar-switcher-target {
-    background: transparent !important;
-    border: none !important;
-    padding: 0px !important;
-    margin: 0px !important;
-  }
-
-  #sidebar-header:hover {
-    background: var(--tab-hover-background-color) !important;
-  }
-
-  #sidebar-title {
-    opacity: 0.7;
-    font-weight: 600;
-    font-size: small;
-  }
-
-  #sidebar-icon {
-    display: none !important;
-  }
-
-  #sidebar-title {
-    padding: 0px !important;
-  }
-
-  #sidebar-close,
-  #sidebar-spacer,
-  #sidebar-throbber {
-    display: none !important;
-  }
-
-  #sidebar-switcher-arrow {
-    padding: var(--toolbarbutton-inner-padding) !important;
-    width: calc(2 * var(--toolbarbutton-inner-padding) + 16px) !important;
-    height: calc(2 * var(--toolbarbutton-inner-padding) + 16px) !important;
-  }
-}
-  
-@-moz-document url("chrome://browser/content/places/historySidebar.xhtml") {
-   #viewButton {
-     background-color: transparent !important;
-	 border: none !important;
-	 border-radius: var(--border-radius-medium);
- 
- 
-   }
+/* click */
+.titlebar-button:active {
+  transform: scale(0.85);
 }
