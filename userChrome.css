@@ -63,3 +63,31 @@
 .titlebar-button:active {
   transform: scale(0.85);
 }
+
+
+
+/* wrapper hidden by default */
+.zen-workspaces-button-wrapper {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* label visible by default */
+.zen-current-workspace-indicator-name {
+  transition: opacity 0.2s ease;
+}
+
+/* hover state */
+.zen-current-workspace-indicator:hover 
+.zen-workspaces-button-wrapper {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* hide label on hover */
+.zen-current-workspace-indicator:hover 
+.zen-current-workspace-indicator-name {
+  opacity: 0;
+}
+
