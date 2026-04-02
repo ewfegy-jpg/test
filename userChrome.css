@@ -66,19 +66,27 @@
 
 
 
-/* wrapper hidden by default */
+.zen-current-workspace-indicator {
+  position: relative;
+}
+
+/* wrapper positioning */
 .zen-workspaces-button-wrapper {
+  position: absolute;
+
+  left: 35px;
+  right: 35px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
 }
 
-/* label visible by default */
-.zen-current-workspace-indicator-name {
-  transition: opacity 0.2s ease;
-}
-
-/* hover state */
+/* hover show */
 .zen-current-workspace-indicator:hover 
 .zen-workspaces-button-wrapper {
   opacity: 1;
@@ -88,6 +96,6 @@
 /* hide label on hover */
 .zen-current-workspace-indicator:hover 
 .zen-current-workspace-indicator-name {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
