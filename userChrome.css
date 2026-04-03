@@ -65,15 +65,16 @@
 }
 
 
-
+/* container relative */
 .zen-current-workspace-indicator {
   position: relative;
+  overflow: hidden; /* prevents elements from overflowing during animation */
+  height: 25px; /* adjust to match your layout */
 }
 
-/* wrapper positioning */
+/* wrapper positioning for buttons */
 .zen-workspaces-button-wrapper {
   position: absolute;
-
   left: 35px;
   right: 35px;
 
@@ -83,19 +84,90 @@
 
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transform: translateY(100%); /* start below */
+
+  transition: transform 0.1s ease, opacity 0.1s ease;
 }
 
-/* hover show */
-.zen-current-workspace-indicator:hover 
-.zen-workspaces-button-wrapper {
+/* workspace name */
+.zen-current-workspace-indicator-name {
+  display: block;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* hover state */
+.zen-current-workspace-indicator:hover .zen-current-workspace-indicator-name {
+
+  opacity: 0 !important;
+}
+
+.zen-current-workspace-indicator:hover .zen-workspaces-button-wrapper {
+  transform: translateY(0); /* slide in from bottom */
   opacity: 1;
   pointer-events: auto;
 }
 
-/* hide label on hover */
-.zen-current-workspace-indicator:hover 
-.zen-current-workspace-indicator-name {
-  opacity: 0 !important;
+
+
+zen-workspace-icons {
+	overflow: hidden;
+	display: flex;
+	gap: 0.5ch;
+	overflow-x: auto;
+	scrollbar-width: none;
+	scroll-behavior: smooth;
+	border-radius: var(--button-border-radius) !important;
+	background: transparent;
+	appearance: unset !important;
+	height: fit-content;
+	gap: 3px;
+	container-type: inline-size;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	font-size: x-small;
+	margin: 0 3px;
+	padding: 0;
+	position: relative;
+	-moz-window-dragging: no-drag;
+}
+
+zen-workspace-icons toolbarbutton {
+  width: 32px;
+  margin: 0;
+	max-width: 28px;
+	height: 28px;
+	display: flex;
+	justify-content: center;
+	padding: 0 !important;
+	align-items: center;
+	position: relative;
+	fill-opacity: 0.6;
+}
+
+zen-workspace-icons toolbarbutton .zen-workspace-icon {
+  width: 14px;
+}
+
+
+
+zen-workspace-icons toolbarbutton[active="true"],
+zen-workspace-icons toolbarbutton:hover,
+zen-workspace-icons toolbarbutton[dragged="true"] {
+	filter: grayscale(0);
+	opacity: 1 !important;
+}
+
+
+zen-workspace-icons toolbarbutton {
+ 
+      filter: grayscale(1);
+      opacity: 0.7;
+      transition: filter 0.2s, opacity 0.2s, width 0.1s, transform 0.2s;
+    }
+
 }
 
