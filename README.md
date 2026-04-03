@@ -1,2 +1,2 @@
 # test
-test 1
+Moves bottom workspace buttons into workspace header after essentials. Shows them on hover.
