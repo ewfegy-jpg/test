@@ -68,8 +68,9 @@
 /* container relative */
 .zen-current-workspace-indicator {
   position: relative;
-  overflow: hidden; /* prevents elements from overflowing during animation */
-  height: 25px; /* adjust to match your layout */
+  overflow: visible !important;
+  height: 25px;
+  min-width: 0;
 }
 
 /* wrapper positioning for buttons */
@@ -133,6 +134,8 @@ zen-workspace-icons {
 	padding: 0;
 	position: relative;
 	-moz-window-dragging: no-drag;
+	flex-shrink: 0 !important;
+    min-width: max-content !important;
 }
 
 zen-workspace-icons toolbarbutton {
