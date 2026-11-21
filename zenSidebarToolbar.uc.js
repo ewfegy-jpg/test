@@ -1,114 +1,125 @@
 (function () {
-const BUTTON_ID = "zen-workspaces-button";
-const WRAPPER_CLASS = "zen-workspaces-button-wrapper";
-const CLONE_CLASS = "zen-workspaces-button-clone";
+  function initWorkspaceButtons() {
+    const originalBtn = document.getElementById("zen-workspaces-button");
+    if (!originalBtn) return;
 
-let scheduled = false;
+    const workspaces = document.querySelectorAll("zen-workspace");
+    if (!workspaces.length) return;
 
-function createWrapper(container) {
-let wrapper = container.querySelector(.${WRAPPER_CLASS});
+    const firstWorkspace = workspaces[0];
 
-if (!wrapper) {
-  wrapper = document.createXULElement("hbox");
-  wrapper.className = WRAPPER_CLASS;
-  wrapper.setAttribute("align", "center");
-  container.appendChild(wrapper);
-}
+    workspaces.forEach((ws) => {
+      const container = ws.querySelector(".zen-current-workspace-indicator");
+      if (!container) return;
 
-return wrapper;
+      let wrapper = container.querySelector(".zen-workspaces-button-wrapper");
 
-}
+      // create wrapper if missing
+      if (!wrapper) {
+        wrapper = document.createXULElement("hbox");
+        wrapper.className = "zen-workspaces-button-wrapper";
+        wrapper.setAttribute("align", "center");
+        container.appendChild(wrapper);
+      }
 
-function initWorkspaceButtons() {
-const originalBtn = document.getElementById(BUTTON_ID);
-const workspaces = document.querySelectorAll("zen-workspace");
+      // FIRST workspace → move ORIGINAL button
+      if (ws === firstWorkspace) {
+        if (!wrapper.contains(originalBtn)) {
+          wrapper.appendChild(originalBtn);
+        }
+      } 
+      // OTHER workspaces → clone
+      else {
+        if (wrapper.querySelector(".zen-workspaces-button-clone")) return;
 
-if (!originalBtn || !workspaces.length) return;
+        const clone = originalBtn.cloneNode(true);
+        clone.removeAttribute("id");
+        clone.classList.add("zen-workspaces-button-clone");
 
-workspaces.forEach((ws, index) => {
-  const container = ws.querySelector(".zen-current-workspace-indicator");
-  if (!container) return;
+        wrapper.appendChild(clone);
+      }
+    });
 
-  const wrapper = createWrapper(container);
-
-  if (index === 0) {
-    if (originalBtn.parentElement !== wrapper) {
-      wrapper.appendChild(originalBtn);
-    }
-    return;
+    console.log("Workspace buttons initialized (original + clones)");
   }
 
-  let clone = wrapper.querySelector(`.${CLONE_CLASS}`);
+  function syncClonesFromOriginal() {
+    const originalContainer = document.getElementById("zen-workspaces-button");
+    if (!originalContainer) return;
 
-  if (!clone) {
-    clone = originalBtn.cloneNode(true);
-    clone.removeAttribute("id");
-    clone.classList.add(CLONE_CLASS);
-    wrapper.appendChild(clone);
+    // find active button in original
+    const activeBtn = originalContainer.querySelector('toolbarbutton[active="true"]');
+    if (!activeBtn) return;
+
+    const activeWorkspaceId = activeBtn.getAttribute("zen-workspace-id");
+    if (!activeWorkspaceId) return;
+
+    // update all cloned buttons
+    const allClones = document.querySelectorAll(".zen-workspaces-button-clone");
+    allClones.forEach((clone) => {
+      const cloneButtons = clone.querySelectorAll("toolbarbutton");
+      cloneButtons.forEach((btn) => {
+        if (btn.getAttribute("zen-workspace-id") === activeWorkspaceId) {
+          btn.setAttribute("active", "true");
+        } else {
+          btn.removeAttribute("active");
+        }
+      });
+    });
   }
-});
 
-attachClickSync();
-syncClonesFromOriginal();
+  function attachClickSync() {
+    const allButtons = document.querySelectorAll("#zen-workspaces-button toolbarbutton, .zen-workspaces-button-clone toolbarbutton");
 
-}
+    allButtons.forEach((btn) => {
+      if (btn._syncListenerAttached) return;
+      btn._syncListenerAttached = true;
 
-function syncClonesFromOriginal() {
-const originalBtn = document.getElementById(BUTTON_ID);
-if (!originalBtn) return;
+      btn.addEventListener("click", () => {
+        // wait a tick for Zen to update original active button, then sync clones
+        setTimeout(syncClonesFromOriginal, 50);
+      });
+    });
+  }
 
-const activeBtn = originalBtn.querySelector('toolbarbutton[active="true"]');
-if (!activeBtn) return;
-
-const activeWorkspaceId = activeBtn.getAttribute("zen-workspace-id");
-if (!activeWorkspaceId) return;
-
-document.querySelectorAll(`.${CLONE_CLASS}`).forEach(clone => {
-  clone.querySelectorAll("toolbarbutton").forEach(btn => {
-    if (btn.getAttribute("zen-workspace-id") === activeWorkspaceId) {
-      btn.setAttribute("active", "true");
-    } else {
-      btn.removeAttribute("active");
-    }
+  // Observe DOM changes to re-init buttons and attach listeners
+  const observer = new MutationObserver(() => {
+    initWorkspaceButtons();
+    attachClickSync();
   });
-});
 
-}
+  observer.observe(document.body, { childList: true, subtree: true });
 
-function attachClickSync() {
-document.querySelectorAll(
-#${BUTTON_ID} toolbarbutton, .${CLONE_CLASS} toolbarbutton
-).forEach(btn => {
-if (btn._workspaceSyncAttached) return;
+  // Initial setup
+  setTimeout(() => {
+    initWorkspaceButtons();
+    attachClickSync();
+    syncClonesFromOriginal();
+  }, 200);
+})();(function () {
+  function moveButton() {
+    const btn = document.getElementById("zen-workspaces-button");
+    const container = document.querySelector(".zen-current-workspace-indicator");
 
-  btn._workspaceSyncAttached = true;
+    if (!btn || !container) return;
 
-  btn.addEventListener("click", () => {
-    setTimeout(syncClonesFromOriginal, 100);
-  });
-});
+    // prevent duplicate move
+    if (container.querySelector("#zen-workspaces-button")) return;
 
-}
+    // create wrapper for layout control
+    const wrapper = document.createXULElement("hbox");
+    wrapper.className = "zen-workspaces-button-wrapper";
+    wrapper.setAttribute("align", "center");
 
-function scheduleInit() {
-if (scheduled) return;
-scheduled = true;
+    wrapper.appendChild(btn);
+    container.appendChild(wrapper);
 
-requestAnimationFrame(() => {
-  scheduled = false;
-  initWorkspaceButtons();
-});
+    console.log("Workspace button moved");
+  }
 
-}
+  // wait for UI
+  const observer = new MutationObserver(moveButton);
+  observer.observe(document.body, { childList: true, subtree: true });
 
-const observer = new MutationObserver(() => {
-scheduleInit();
-});
-
-observer.observe(document.body, {
-childList: true,
-subtree: true
-});
-
-setTimeout(initWorkspaceButtons, 300);
+  setTimeout(moveButton, 100);
 })();
